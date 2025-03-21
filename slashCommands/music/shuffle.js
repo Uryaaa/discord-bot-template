@@ -9,18 +9,19 @@ module.exports = {
     async execute(interaction) {
         const queue = useQueue(interaction.guild.id);
 
-        if (!queue || !queue.tracks.length) {
+        if (!queue || queue.size === 0) { 
             return interaction.reply({
                 embeds: [
                     new EmbedBuilder()
                         .setDescription('❌ The queue is empty!')
                         .setColor('#FF0000')
                 ],
-                flags:MessageFlags.Ephemeral
+                flags: MessageFlags.Ephemeral
             });
         }
 
         queue.tracks.shuffle();
+
         return interaction.reply({
             embeds: [
                 new EmbedBuilder()

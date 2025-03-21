@@ -15,29 +15,29 @@ module.exports = {
         const position = interaction.options.getInteger('position');
         const queue = useQueue(interaction.guild.id);
 
-        if (!queue || !queue.tracks.length) {
+        if (!queue || queue.size === 0) {
             return interaction.reply({
                 embeds: [
                     new EmbedBuilder()
                         .setDescription('❌ The queue is empty!')
                         .setColor('#FF0000') // Red color
                 ],
-                flags:MessageFlags.Ephemeral
+                flags: MessageFlags.Ephemeral
             });
         }
 
-        if (position < 1 || position > queue.tracks.length) {
+        if (position < 1 || position > queue.size) {
             return interaction.reply({
                 embeds: [
                     new EmbedBuilder()
                         .setDescription('❌ Invalid position! Please provide a number between 1 and the length of the queue.')
                         .setColor('#FF0000') // Red color
                 ],
-                flags:MessageFlags.Ephemeral
+                flags: MessageFlags.Ephemeral
             });
         }
 
-        const removedTrack = queue.node.remove(position - 1); // Positions are 0-based internally
+        const removedTrack = queue.removeTrack(position - 1); // Use correct removal method
 
         return interaction.reply({
             embeds: [

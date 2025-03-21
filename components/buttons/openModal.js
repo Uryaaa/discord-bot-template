@@ -9,7 +9,7 @@ module.exports = {
 
         const feedbackInput = new TextInputBuilder()
             .setCustomId("feedback_input")
-            .setLabel("Masukkan feedback kamu")
+            .setLabel("Enter your feedback")
             .setStyle(TextInputStyle.Paragraph)
             .setRequired(true);
 

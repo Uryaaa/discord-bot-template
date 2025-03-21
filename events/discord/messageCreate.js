@@ -3,8 +3,11 @@ module.exports = async (client, message) => {
 
     const args = message.content.slice(1).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
-    
-    const command = client.textCommands.get(commandName);
+
+    // Cari command berdasarkan nama atau alias
+    const command = client.textCommands.get(commandName) ||
+                    client.textCommands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+
     if (!command) return;
 
     try {

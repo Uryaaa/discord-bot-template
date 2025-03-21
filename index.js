@@ -1,15 +1,32 @@
-const { Client, Collection, GatewayIntentBits } = require('discord.js');
+const { Client, Collection, GatewayIntentBits, Partials} = require('discord.js');
 const { Player } = require('discord-player');
 const { DefaultExtractors } = require('@discord-player/extractor');
 const {YoutubeiExtractor} = require('discord-player-youtubei');
 require('dotenv').config();
-
+const {DeezerExtractor, NodeDecryptor} = require('discord-player-deezer');
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildVoiceStates,
         GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildWebhooks,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.GuildPresences,
+        
+    ],
+    allowedMentions: {
+        parse: ['users', 'roles'],
+        repliedUser: false
+    },
+    partials : [
+        Partials.Channel,
+        Partials.Message,
+        Partials.User,
+        Partials.GuildMember,
+        Partials.Reaction
     ]
 });
 
@@ -27,7 +44,14 @@ async function initialize() {
         const player = new Player(client);
         await player.extractors.loadMulti(DefaultExtractors);
         await player.extractors.register(YoutubeiExtractor, {
-          /** extractor options goes here */  
+          /** extractor options goes here */ 
+           
+        })
+        await player.extractors.register(DeezerExtractor, {
+          /** extractor options goes here */
+            decryptionKey:process.env.key,
+            arl: process.env.arl,
+            decryptor: NodeDecryptor,
         })
 
         // Load all handlers

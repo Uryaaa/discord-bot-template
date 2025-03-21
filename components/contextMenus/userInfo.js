@@ -1,4 +1,4 @@
-const { ContextMenuCommandBuilder, ApplicationCommandType } = require('discord.js');
+const { ContextMenuCommandBuilder, ApplicationCommandType, MessageFlags } = require('discord.js');
 
 module.exports = {
     data: new ContextMenuCommandBuilder()
@@ -10,7 +10,7 @@ module.exports = {
 
         await interaction.reply({
             content: `👤 **User Info**\n- **Username:** ${user.username}\n- **ID:** ${user.id}`,
-            ephemeral: true
+            flags:MessageFlags.Ephemeral
         });
     }
 };

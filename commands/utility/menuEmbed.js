@@ -1,60 +1,60 @@
-const { ActionRowBuilder, ButtonBuilder, StringSelectMenuBuilder, EmbedBuilder, ButtonStyle } = require("discord.js");
+const { ActionRowBuilder, ButtonBuilder, StringSelectMenuBuilder, EmbedBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = {
-    name: "menu",
+    name: 'menu',
     aliases: [],
-    category: "utility",
-    description: "Menampilkan menu dengan button dan select menu statis serta dinamis.",
-    async execute (message) {
+    category: 'utility',
+    description: 'Displays a menu with static and dynamic buttons and select menus.',
+    async execute(message) {
         const embed = new EmbedBuilder()
-            .setTitle("📋 Pilih Opsi")
-            .setDescription("Gunakan tombol atau select menu di bawah ini untuk berinteraksi.")
-            .setColor("#00AEEF");
+            .setTitle('📋 Choose an Option')
+            .setDescription('Use the buttons or select menus below to interact.')
+            .setColor('#00AEEF');
 
-        // 🔹 Button Statis
+        // 🔹 Static Button
         const staticButton = new ButtonBuilder()
-            .setCustomId("static_button")
-            .setLabel("🔘 Static Button")
+            .setCustomId('static_button')
+            .setLabel('🔘 Static Button')
             .setStyle(ButtonStyle.Primary);
 
-        // 🔹 Button Dinamis (Menggunakan ID tambahan)
+        // 🔹 Dynamic Button (Using additional ID)
         const dynamicButton = new ButtonBuilder()
-            .setCustomId("dynamic_button=123")
-            .setLabel("🌀 Dynamic Button (ID 123)")
+            .setCustomId('dynamic_button=123')
+            .setLabel('🌀 Dynamic Button (ID 123)')
             .setStyle(ButtonStyle.Success);
 
-        // 🔹 Select Menu Statis
+        // 🔹 Static Select Menu
         const staticSelectMenu = new StringSelectMenuBuilder()
-            .setCustomId("static_select")
-            .setPlaceholder("📌 Pilih opsi statis...")
+            .setCustomId('static_select')
+            .setPlaceholder('📌 Choose a static option...')
             .addOptions([
-                { label: "Opsi 1", value: "option1" },
-                { label: "Opsi 2", value: "option2" },
-                { label: "Opsi 3", value: "option3" }
+                { label: 'Option 1', value: 'option1' },
+                { label: 'Option 2', value: 'option2' },
+                { label: 'Option 3', value: 'option3' }
             ]);
 
-        // 🔹 Select Menu Dinamis (Menggunakan ID tambahan)
+        // 🔹 Dynamic Select Menu (Using additional ID)
         const dynamicSelectMenu = new StringSelectMenuBuilder()
-            .setCustomId("dynamic_select=456")
-            .setPlaceholder("🔄 Pilih opsi dinamis...")
+            .setCustomId('dynamic_select=456')
+            .setPlaceholder('🔄 Choose a dynamic option...')
             .addOptions([
-                { label: "Kategori A", value: "category_a" },
-                { label: "Kategori B", value: "category_b" },
-                { label: "Kategori C", value: "category_c" }
+                { label: 'Category A', value: 'category_a' },
+                { label: 'Category B', value: 'category_b' },
+                { label: 'Category C', value: 'category_c' }
             ]);
 
-        // Baris 1: Button Statis & Dinamis
+        // Row 1: Static & Dynamic Buttons
         const buttonRow = new ActionRowBuilder().addComponents(staticButton, dynamicButton);
 
-        // Baris 2: Select Menu Statis (HARUS DIPISAH)
+        // Row 2: Static Select Menu (MUST BE SEPARATE)
         const staticSelectRow = new ActionRowBuilder().addComponents(staticSelectMenu);
 
-        // Baris 3: Select Menu Dinamis (HARUS DIPISAH)
+        // Row 3: Dynamic Select Menu (MUST BE SEPARATE)
         const dynamicSelectRow = new ActionRowBuilder().addComponents(dynamicSelectMenu);
 
-        await message.reply({ 
-            embeds: [embed], 
-            components: [buttonRow, staticSelectRow, dynamicSelectRow] 
+        await message.reply({
+            embeds: [embed],
+            components: [buttonRow, staticSelectRow, dynamicSelectRow]
         });
     }
 };

@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: "feedback",
@@ -13,30 +13,26 @@ module.exports = {
             return message.reply("❌ Command ini tidak bisa digunakan di DM.");
         }
 
-        // Buat modal
-        const modal = new ModalBuilder()
-            .setCustomId("feedback_form")
-            .setTitle("Feedback Form");
+        // Embed untuk feedback
+        const embed = new EmbedBuilder()
+            .setColor("#00ff00")
+            .setTitle("Feedback")
+            .setDescription("📝 Klik tombol di bawah untuk memberikan feedback!");
 
-        // Input feedback
-        const feedbackInput = new TextInputBuilder()
-            .setCustomId("feedback_input")
-            .setLabel("Masukkan feedback kamu")
-            .setStyle(TextInputStyle.Paragraph)
-            .setRequired(true);
+        // Tombol untuk membuka modal
+        const button = new ButtonBuilder()
+            .setCustomId("open_feedback") // Sesuai dengan modalButton.js
+            .setLabel("Buka Formulir")
+            .setStyle(ButtonStyle.Primary);
 
-        // Tambahkan ke modal
-        const actionRow = new ActionRowBuilder().addComponents(feedbackInput);
-        modal.addComponents(actionRow);
+        const actionRow = new ActionRowBuilder().addComponents(button);
 
+        // Kirim embed dengan tombol
         try {
-            await message.reply("📝 Klik tombol di bawah untuk memberikan feedback!", { ephemeral: true });
-
-            // Tampilkan modal
-            await message.author.send({ content: "🔹 Klik tombol di bawah untuk memberikan feedback!", components: [modal] });
+            await message.reply({ embeds: [embed], components: [actionRow] });
         } catch (error) {
             console.error(error);
-            await message.reply("❌ Gagal membuka modal. Pastikan bot memiliki izin untuk mengirim pesan di DM.");
+            await message.reply("❌ Gagal mengirim pesan.");
         }
     }
 };

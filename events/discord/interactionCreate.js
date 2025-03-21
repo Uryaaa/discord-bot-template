@@ -1,3 +1,5 @@
+const { MessageFlags } = require("discord.js")
+
 module.exports = async (client, interaction) => {
     if (interaction.isChatInputCommand()) {
         const command = client.slashCommands.get(interaction.commandName);
@@ -14,11 +16,21 @@ module.exports = async (client, interaction) => {
                     console.error(error);
                     await interaction.reply({
                         content: '❌ Command failed: ' + error.message,
-                        ephemeral: true // why this is deprecated
+                        flags:MessageFlags.Ephemeral
                     });
                 }
             }
         );
+    } else if (interaction.isAutocomplete()) {
+        const command = client.slashCommands.get(interaction.commandName);
+        if (!command || !command.autocompleteRun) return;
+
+        try {
+            await command.autocompleteRun(interaction);
+        } catch (error) {
+            console.error(error);
+            await interaction.respond([]);
+        }
     }
 
     if (interaction.isButton()) {
@@ -37,7 +49,7 @@ module.exports = async (client, interaction) => {
                 await button.execute(client, interaction, id);
             } catch (error) {
                 console.error(error);
-                await interaction.reply({ content: '❌ Button error: ' + error.message, ephemeral: true });
+                await interaction.reply({ content: '❌ Button error: ' + error.message, flags:MessageFlags.Ephemeral });
             }
         }
     }
@@ -58,7 +70,7 @@ module.exports = async (client, interaction) => {
                 await selectMenu.execute(client, interaction, id);
             } catch (error) {
                 console.error(error);
-                await interaction.reply({ content: '❌ Select menu error: ' + error.message, ephemeral: true });
+                await interaction.reply({ content: '❌ Select menu error: ' + error.message, flags:MessageFlags.Ephemeral });
             }
         }
     }
@@ -73,10 +85,31 @@ module.exports = async (client, interaction) => {
             console.error(error);
             await interaction.reply({
                 content: '❌ Context menu failed: ' + error.message,
-                ephemeral: true
+                flags:MessageFlags.Ephemeral
             });
         }
     }
 
+    if (interaction.isModalSubmit()) {
+        let customId = interaction.customId;
+        let id = null;
+    
+        if (customId.includes('=')) {
+            const parts = customId.split('=');
+            customId = parts[0] + '='; 
+            id = parts[1];
+        }
+    
+        const modal = client.modals.get(customId);
+        if (modal) {
+            try {
+                await modal.execute(client, interaction, id);
+            } catch (error) {
+                console.error(error);
+                await interaction.reply({ content: '❌ Modal error: ' + error.message, flags:MessageFlags.Ephemeral });
+            }
+        }
+    }
+    
     
 };

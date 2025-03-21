@@ -1,9 +1,7 @@
 const { Client, Collection, GatewayIntentBits, Partials} = require('discord.js');
 const { Player } = require('discord-player');
 const { DefaultExtractors } = require('@discord-player/extractor');
-const {YoutubeiExtractor} = require('discord-player-youtubei');
 require('dotenv').config();
-const {DeezerExtractor, NodeDecryptor} = require('discord-player-deezer');
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -43,16 +41,7 @@ async function initialize() {
         // Initialize player
         const player = new Player(client);
         await player.extractors.loadMulti(DefaultExtractors);
-        await player.extractors.register(YoutubeiExtractor, {
-          /** extractor options goes here */ 
-           
-        })
-        await player.extractors.register(DeezerExtractor, {
-          /** extractor options goes here */
-            decryptionKey:process.env.key,
-            arl: process.env.arl,
-            decryptor: NodeDecryptor,
-        })
+        
 
         // Load all handlers
         require('./loaders/discordEvents')(client);

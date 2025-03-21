@@ -17,11 +17,13 @@ Yet another Discord Bot Template
     - Go to your application -> General Information then copy save the 'Application ID'
     - Go to your application -> Bot then click reset token/issue token and save it
     - In your project folder, create a `.env` file and fill with your Application ID and Token 
+  
    ```bash
    token=    # your token
    clientId= # your clientId
    ```
     - Start the bot
+  
     ```bash
     node .
     ```

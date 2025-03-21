@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, MessageFlags } = require('discord.js');
 
 module.exports = (player, queue, error) => {
     console.error(`❌ Player error: ${error.message}`);
@@ -12,7 +12,7 @@ module.exports = (player, queue, error) => {
             .setColor("#FF0000") // Red color
             .setTimestamp();
 
-        queue.metadata.send({ embeds: [embed] }).catch(console.error);
+        queue.metadata.send({ embeds: [embed], flags:MessageFlags.Ephemeral }).catch(console.error);
     } catch (err) {
         console.error("Error sending player error embed:", err);
     }
